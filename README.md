@@ -1,3 +1,3 @@
-#ChromiumStealer
+# ChromiumStealer
 
 🔥 Yoink chromium stuff 🔥
