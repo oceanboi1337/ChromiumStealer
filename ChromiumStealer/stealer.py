@@ -1,4 +1,4 @@
-import sqlite3, os, tempfile, string, random, shutil, json
+import sqlite3, os, tempfile, string, random, shutil
 
 from .crypter import Crypter
 from .browsers import Browsers
