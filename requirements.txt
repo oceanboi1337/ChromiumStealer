@@ -1,0 +1,2 @@
+py -m pip install pycryptodomex
+py -m pip install pypiwin32
